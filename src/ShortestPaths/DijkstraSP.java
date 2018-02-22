@@ -2,6 +2,8 @@ package ShortestPaths;
 
 import ChainedList.Stack;
 import MinimumTree.IndexMinPQ;
+import Stdlib.In;
+import Stdlib.StdOut;
 
 public class DijkstraSP {
 	private double[] distTo;	//distTo[v] = distance of shortest s->v path
@@ -73,6 +75,11 @@ public class DijkstraSP {
 		return distTo[v] < Double.POSITIVE_INFINITY;
 	}
 	
+	/**
+	 * Returns a shortest path form the source vertex{s} to vertex{v}
+	 * @param v
+	 * @return
+	 */
 	public Iterable<DirectedEdge> pathTo(int v){
 		validateVertex(v);
 		if(!hasPathTo(v)) return null;
@@ -139,5 +146,26 @@ public class DijkstraSP {
     		}
     	}
     	return true;
+    }
+    
+    public static void main(String[] args){
+    	In in = new In(args[0]);
+    	EdgeWeightedDigraph G = new EdgeWeightedDigraph(in);
+    	int s = Integer.parseInt(args[1]);
+    	
+    	//compute shortest paths
+    	DijkstraSP sp = new DijkstraSP(G, s);
+    	
+    	for(int t=0; t<G.V(); t++){
+    		if(sp.hasPathTo(t)){
+    			StdOut.printf("%d to %d (%.2f) ", s, t, sp.distTo(t));
+    			for(DirectedEdge e : sp.pathTo(t)){
+    				StdOut.print(e + "	");
+    			}
+    			StdOut.println();
+    		}else {
+				StdOut.printf("%d to %d       no path\n", s, t);
+			}
+    	}
     }
 }
